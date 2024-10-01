@@ -548,31 +548,41 @@ int valorRomano(char c) {
     }
 }
 
-int problema_10(){
-    cout << "*** PROBLEMA 10 ***" << endl << endl;
-
+int problema_10() {
+    cout << "*** PROBLEMA 10 ***" << endl;
     string numeroRomano;
-    cout << "Ingrese un numero romano: ";
-    cin >> numeroRomano;
-    for (size_t i = 0; i < numeroRomano.length(); i++){
+
+    while (true) {
+        cout << "Ingrese un numero romano: ";
+        cin >> numeroRomano;
+        for (size_t i = 0; i < numeroRomano.length(); i++){
             numeroRomano[i] = toupper(numeroRomano[i]);
         }
+        int total = 0;
+        int prevValor = 0;
+        bool esValido = true;
 
-    int total = 0;
-    int prevValor = 0;
-
-    // Recorre el string de derecha a izquierda
-    for (int i = numeroRomano.length() - 1; i >= 0; --i) {
-        int valor = valorRomano(numeroRomano[i]);
-        if (valor < prevValor) {
-            total -= valor;
-        } else {
-            total += valor;
+        for (int i = numeroRomano.length() - 1; i >= 0; --i) {
+            int valor = valorRomano(numeroRomano[i]);
+            if (valor != 0) {
+                if (valor < prevValor) {
+                    total -= valor;
+                } else {
+                    total += valor;
+                }
+                prevValor = valor;
+            } else {
+                cout << "Error: el numero ingresado no es un numero romano valido.\n";
+                esValido = false;
+                break;
+            }
         }
-        prevValor = valor;
-    }
 
-    cout << numeroRomano << ": " << total << endl;
+        if (esValido) {
+            cout << numeroRomano << ": " << total << endl;
+            break;
+        }
+    }
     return 0;
 }
 
@@ -997,8 +1007,40 @@ int problema_15(){
     return 0;
 }
 
-int problema_16(){
+unsigned long long factorial(int num) {
+    unsigned long long result = 1;
+    for (int i = 1; i <= num; ++i) {  // calcular el factorial de un numero
+        result *= i;
+    }
+    return result;
+}
+
+// Función para calcular el número de caminos en una cuadrícula de n x n
+unsigned long long caminos(int n) {
+    return factorial(2 * n) / (factorial(n) * factorial(n)); // formula de la combinación (apoyado con un video de youtube)
+}
+
+int problema_16() {
     cout << "*** PROBLEMA 16 ***" << endl << endl;
+    int n;
+    while (true) {
+        cout << "Ingrese el tamano N de la matriz: ";
+        cin >> n;
+
+        // Verifica si la entrada es un número
+        if (cin.fail()) {
+            cout << "Error: Debe ingresar un numero valido." << endl; // Si hubo un error en la entrada, mostrar un mensaje
+            cin.clear(); // Limpia el estado de error
+            cin.ignore(10000, '\n'); // Ignora hasta 10000 caracteres o hasta nueva línea
+            continue; // Vuelve a solicitar la entrada
+        } else {
+            break; // Si la entrada es válida, salimos del bucle
+        }
+    }
+
+    cout << "Para una malla de " << n << "x" << n << " puntos hay " << caminos(n) << " caminos." << endl;  //se imprime en pantalla el resultado
+
+    return 0;
 }
 
 int problema_17(){
