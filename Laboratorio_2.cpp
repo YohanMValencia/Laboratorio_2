@@ -1,5 +1,10 @@
 #include <iostream>
+#include <cstdlib> //libreria para generar numeros aleatorios
+#include <ctime> //libreria para garantizar el generado de numeros aleatorios
 #include <string>
+#include <cmath> //libreria para hallar la potencia
+#include <vector>
+#include <cctype> // para las funciones islower y toupper
 using namespace std;
 
 int problema_1();
@@ -209,6 +214,38 @@ int problema_1(){
 
 int problema_2(){
     cout << "*** PROBLEMA 2 ***" << endl << endl;
+
+    //cout << "ingrese un valor entero \n";
+    char letras[200];
+    char Letras[26]={'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+    int cantidad[26] = {0};
+    char a;
+
+    int contador =0;
+
+    srand(time(0));
+
+    for (int i = 0; i< 200; i++){ //genera todas las letras del alfabeto y las guarda en letras
+        a = 65 + (rand() % 26);
+        letras[i] = a;
+        cout << letras[i]<< " ";
+    }
+
+    for(int i =0; i < 26 ; i ++){ //cuenta cuanto se repite cada letra dentro de letras y los guarda en cantidad
+        for(int j = 0; j < 200 ; j++){
+            if(letras[j] == 'A' + i){
+                contador++;
+            }
+        }
+        cantidad[i] = contador;
+        contador = 0;
+    }
+
+    cout << '\n';
+    for(int i = 0; i < 26 ; i++){ // imprime cada cuanto se repitiio cada letra del alfabeto en mayuscula
+        cout << Letras[i]<< ": " << cantidad[i]<< '\n';
+    }
+    return 0;
 }
 
 int problema_3(){
@@ -251,7 +288,41 @@ int problema_3(){
 
 int problema_4(){
     cout << "*** PROBLEMA 4 ***" << endl << endl;
-}
+
+    cout << "ingrese una cadena de numeros enteros: ";
+
+        while(true){
+            bool verdadero = false;
+            int Numero = 0, aux = 0;
+            string cadena;
+            cin >> cadena;
+            vector<char> numeros(cadena.length());
+
+            for(size_t i = 0; i < cadena.length(); i++){
+                if(cadena[i] <= 57 &&  cadena[i] >= 48){ //pasa los numeros del string a numeros enteros guardados en un arreglo
+                    numeros[i] = cadena[i] - '0';
+                    if(i == cadena.length()-1){
+                        verdadero = true;
+                    }
+                }
+                else{
+                    cout << "la cadena no es de solo numeros \n";//verifica que la cadena ingresada sea de solo numeros
+                    break;
+                }
+            }
+            if (verdadero == true){ //si la cadena es de solo numero, se genera el numero entero atravez de la formula "pocision de numeros" * 10^^longitud de cadena -1
+                for(size_t i = 0; i < cadena.length(); i++){
+                    aux = pow(10, cadena.length()-i-1);
+                    Numero = Numero + (numeros[i]*aux); //en cada iteracion se hiran agragando valores a Numero
+                }
+                cout << "el numero entero es: "<< Numero<<'\n';  //finalmente se retorna el numero entero
+                break;
+            }
+            cout << "ingrese una cadena de solo numeros: ";
+        }
+
+        return 0;
+    }
 
 int problema_5(){
     cout << "*** PROBLEMA 5 ***" << endl << endl;
@@ -312,6 +383,26 @@ int problema_5(){
 
 int problema_6(){
     cout << "*** PROBLEMA 6 ***" << endl << endl;
+
+    string cadena;
+    cout << "ingrese una cadena de caracteres que desea convertir: ";
+    cin >> cadena;
+
+    vector<char> caracteres(cadena.length());
+
+    for(size_t i = 0; i < cadena.length(); i ++){
+        if (cadena[i] >= 97 && cadena[i]<= 122){ //verifica que este en el rango de minusculas en la tabla ascii
+            caracteres[i] = cadena[i]- 32; //mediante la tabla se cambian minusculas por mayusculas
+        }
+        else{
+            caracteres[i] = cadena[i]; //si es caracter/numero cualquiera se agrega sin cambios
+        }
+    }
+    cout << "cadena convertida:";
+    for(size_t i = 0; i < cadena.length(); i ++){
+        cout << caracteres[i]; //se imprime la conversion
+    }
+    return 0;
 }
 
 int problema_7(){
@@ -350,6 +441,56 @@ int problema_7(){
 
 int problema_8(){
     cout << "*** PROBLEMA 8 ***" << endl << endl;
+
+    cout << "ingrese una cadena de caracteres que desea separar Numeros/letras : ";
+
+    string cadena;
+    cin >> cadena; // permite la entrada de espacios
+
+    int cont_le = 0;
+    int cont_nu = 0;
+
+    int j=0, k=0;
+
+    for(size_t i = 0; i < cadena.length(); i ++){
+        if ((cadena[i] <= 90 && cadena[i]>=65)){
+            cont_le++; //cantidad de letras en la cadena
+        }
+        else if ((cadena[i] <= 122 && cadena[i]>=97)){ //verifica que este entre A-Z y a-z
+            cont_le++;
+        }
+
+        else if (cadena[i] <= 57 && cadena[i]>=48){ //verifica que este entre 0-9
+            cont_nu++;
+        }
+    }
+
+
+    vector<char> letras(cont_le); // Vectores para almacenar letras y números
+    vector<char> numeros(cont_nu);
+
+    for(size_t i = 0; i < cadena.length(); i++){
+        if ((cadena[i] <= 90 && cadena[i]>=65) or (cadena[i] <= 122 && cadena[i]>=97)){
+            letras[j++] = cadena[i]; //se asignan letras
+        }
+    }
+
+    for (size_t i = 0; i < cadena.length(); i++){
+        if (cadena[i] <= 57 && cadena[i]>=48){
+            numeros[k++] = cadena[i]; //se asignan numeros
+        }
+    }
+    cout << "letras: ";
+    for(int i = 0; i < cont_le; i++){ //los imprime
+        cout << letras[i];
+    }
+    cout << '\n';
+    cout << "numeros: ";
+    for(int i = 0; i < cont_nu; i++){
+        cout << numeros[i];
+    }
+
+    return 0;
 }
 
 int problema_9(){
@@ -394,8 +535,45 @@ int problema_9(){
     return 0;
 }
 
+int valorRomano(char c) {
+    switch (c) {
+    case 'I': return 1;
+    case 'V': return 5;
+    case 'X': return 10;
+    case 'L': return 50;
+    case 'C': return 100;
+    case 'D': return 500;
+    case 'M': return 1000;
+    default: return 0;
+    }
+}
+
 int problema_10(){
     cout << "*** PROBLEMA 10 ***" << endl << endl;
+
+    string numeroRomano;
+    cout << "Ingrese un numero romano: ";
+    cin >> numeroRomano;
+    for (size_t i = 0; i < numeroRomano.length(); i++){
+            numeroRomano[i] = toupper(numeroRomano[i]);
+        }
+
+    int total = 0;
+    int prevValor = 0;
+
+    // Recorre el string de derecha a izquierda
+    for (int i = numeroRomano.length() - 1; i >= 0; --i) {
+        int valor = valorRomano(numeroRomano[i]);
+        if (valor < prevValor) {
+            total -= valor;
+        } else {
+            total += valor;
+        }
+        prevValor = valor;
+    }
+
+    cout << numeroRomano << ": " << total << endl;
+    return 0;
 }
 
 int problema_11(){
@@ -523,18 +701,300 @@ int problema_11(){
 
 int problema_12(){
     cout << "*** PROBLEMA 12 ***" << endl << endl;
+
+    int tamano, posicion=0;
+    int valor, aux =0;
+    while(true){
+        cout << "Ingrese el tamano de la matriz cuadrada: ";
+        cin >> tamano;
+
+        if(cin.fail()){
+            cout << "Error, debe ingresar un numero valido \n";
+            cin.clear();
+            cin.ignore(10000, '\n'); //el bloque while verifica que sea un numero
+            continue;
+        }
+        else{
+            break;
+        }
+    }
+    bool verdadero = true;
+    int sumas[(2*tamano)+1];
+    int matriz[tamano][tamano];
+
+    for(int i = 0; i < tamano; i++){
+        for(int j = 0; j < tamano; j++){
+            while(true){
+                cout << "ingrese el valor de la posicion ["<<i+1<<","<< j+1<<"] \n";  //el bloque for sirve para asignarle el valor a cada posicion de la matriz
+                cin >> valor;
+                if(cin.fail()){
+                    cout << "Error, debe ingresar un numero valido \n";
+                    cin.clear();
+                    cin.ignore(10000, '\n'); //el bloque while verifica que sea un numero
+                    continue;
+                }
+
+                else{
+                    matriz[i][j] = valor;
+                    break;
+                }
+            }
+
+
+        }
+    }
+    cout << "tu matriz cuadrada es: \n";
+    for(int i = 0; i < tamano; i++){
+        for(int j = 0; j < tamano; j++){ // imprime la matriz en consola
+            cout << "|"<<matriz[i][j];
+        }
+        cout << "| \n";
+    }
+
+    for(int i = 0; i < tamano; i++){
+        for(int j = 0; j < tamano; j++){ //halla las sumas de las filas
+            aux = aux+ matriz[i][j];
+        }
+        sumas[posicion++] = aux;
+        aux = 0;
+    }
+    for(int j = 0; j < tamano; j++){
+        for(int i = 0; i < tamano; i++){ //halla la suma de las columnas
+            aux = aux + matriz[i][j];
+        }
+        sumas[posicion++] = aux;
+        aux = 0;
+    }
+
+    for(int i = 0; i < tamano; i++){ //halla la suma de la diagonal
+        aux = aux + matriz[i][i];
+    }
+    sumas[posicion++] = aux;
+    cout << "sumas de filas, columnas, diagonal principal: ";
+    for(int i = 0; i < ((2*tamano)+1); i++){ //imprime todas las sumas
+        cout << sumas[i]<< " ";
+    }
+    cout <<'\n';
+
+    for(int i = 0; i < ((2*tamano)); i++){
+        if(sumas[i] == sumas[i+1]){
+            verdadero = true; //determina si es un cuadrado magico
+        }
+        else{
+            verdadero = false;
+        }
+    }
+
+    if (verdadero == true){
+        cout << "La matriz es un cuadrado magico \n";
+    }
+    else{
+        cout << "La matriz no es cuadrado magico \n";
+    }
+    return 0;
 }
 
 int problema_13(){
     cout << "*** PROBLEMA 13 ***" << endl << endl;
+
+    // Dimensiones de la matriz
+    const int ROWS = 6;
+    const int COLS = 8;
+
+    // Matriz que representa la imagen de la galaxia NGC 1300
+    int matriz[ROWS][COLS] = {
+        { 0,  3,  4,  0,  0,  0,  6,  8},
+        { 5, 13,  6,  0,  0,  0,  2,  3},
+        { 2,  6,  2,  7,  3,  0, 10,  0},
+        { 0,  4, 15,  4,  1,  6,  0,  0},
+        { 0,  7, 12,  6,  9, 10,  4,  5},
+        { 0,  6, 10,  6,  4,  8,  0,  0}
+    };
+
+    int estrellas = 0; // Contador de estrellas
+
+    // Imprimir la matriz de imagen
+    cout << "Matriz de la galaxia NGC 1300:" << endl;
+    for (int i = 0; i < ROWS; i++){
+        for (int j = 0; j < COLS; j++){
+            cout << matriz[i][j] << "\t"; // Imprimir con tabulación para separar los valores
+        }
+        cout << endl; // Salto de línea después de cada fila
+    }
+
+    cout << endl; // Espacio entre la matriz y el resultado
+
+    // Recorrer la matriz excluyendo los bordes
+    for (int i = 1; i < ROWS - 1; i++){
+        for (int j = 1; j < COLS - 1; j++){
+            // Promedio de la posición actual y las adyacentes
+            int promedio = (
+                        matriz[i][j] +          // a_i,j (centro)
+                        matriz[i][j-1] +        // a_i,j-1 (izquierda)
+                        matriz[i][j+1] +        // a_i,j+1 (derecha)
+                        matriz[i-1][j] +        // a_i-1,j (arriba)
+                        matriz[i+1][j]          // a_i+1,j (abajo)
+                    ) / 5;
+
+            // Verificar si el promedio es mayor a 6
+            if (promedio > 6){
+                estrellas++;
+            }
+        }
+    }
+
+    // Imprimir el número de estrellas encontradas
+    cout << "Numero de estrellas encontradas: " << estrellas << endl;
+    return 0;
 }
 
 int problema_14(){
     cout << "*** PROBLEMA 14 ***" << endl << endl;
+
+    int n = 5, contador = 1;
+    int matriz[5][5];
+
+    for(int i = 0; i < n; i ++){
+        for (int j = 0; j< n; j++){
+            matriz[i][j] = contador++;
+        }
+    }
+    cout << "la matriz original: \n";
+    for(int i = 0; i < n ; i++){
+        for(int j = 0; j<n; j++){
+            if(matriz[i][j]<= 9){
+                cout << "|0"<<matriz[i][j];
+            }
+            else{
+                cout << "|"<<matriz[i][j];
+            }
+        }
+        cout <<"| \n";
+    }
+
+    cout <<"matriz rotada 90 grados: \n";
+    for(int j = 0; j < n ; j++){
+        for(int i = (n-1); i>= 0; i--){
+            if(matriz[i][j]<= 9){
+                cout << "|0"<<matriz[i][j];
+            }
+            else{
+                cout << "|"<<matriz[i][j];
+            }
+        }
+        cout <<"| \n";
+    }
+
+    cout << "matriz rotada 180 grados: \n";
+    for(int i = (n-1); i>=0 ; i--){
+        for(int j = (n-1); j>= 0; j--){
+            if(matriz[i][j]<= 9){
+                cout << "|0"<<matriz[i][j];
+            }
+            else{
+                cout << "|"<<matriz[i][j];
+            }
+        }
+        cout <<"| \n";
+    }
+    cout << "matriz rotada 270 grados: \n";
+    for(int j = 4; j>=0 ; j--){
+        for(int i = 0; i<n; i++){
+            if(matriz[i][j]<= 9){
+                cout << "|0"<<matriz[i][j];
+            }
+            else{
+                cout << "|"<<matriz[i][j];
+            }
+        }
+        cout <<"| \n";
+    }
+
+
+    return 0;
 }
 
 int problema_15(){
     cout << "*** PROBLEMA 15 ***" << endl << endl;
+
+    // Definir los dos rectángulos A y B
+    int rectA[4], rectB[4], rectC[4]; // A y B son los rectángulos de entrada
+
+    // Ingresar valores para el rectángulo A
+    cout << "Ingrese las coordenadas del rectangulo A (x, y, ancho, alto): ";
+    cin >> rectA[0] >> rectA[1] >> rectA[2] >> rectA[3]; // Ejemplo: {0, 0, 8, 4}
+
+    // Ingresar valores para el rectángulo B
+    cout << "Ingrese las coordenadas del rectangulo B (x, y, ancho, alto): ";
+    cin >> rectB[0] >> rectB[1] >> rectB[2] >> rectB[3]; // Ejemplo: {5, 2, 6, 7}
+    cout << endl;
+
+    // Imprimir los rectángulos ingresados
+    cout << "Rectangulo A: (" << rectA[0] << ", " << rectA[1] << ") - Ancho: " << rectA[2] << ", Alto: " << rectA[3] << endl;
+    cout << "Rectangulo B: (" << rectB[0] << ", " << rectB[1] << ") - Ancho: " << rectB[2] << ", Alto: " << rectB[3] << endl << endl ;
+
+
+    // Calcular las coordenadas de las esquinas inferiores derechas de los rectángulos A y B
+    int x2A = rectA[0] + rectA[2];  // Esquina inferior derecha x de A
+    int y2A = rectA[1] + rectA[3];  // Esquina inferior derecha y de A
+    int x2B = rectB[0] + rectB[2];  // Esquina inferior derecha x de B
+    int y2B = rectB[1] + rectB[3];  // Esquina inferior derecha y de B
+
+    // Encontrar la intersección
+    int x1C, y1C, x2C, y2C;
+
+    // Cálculo de x1C (mayor valor de x de las esquinas superiores izquierdas)
+    if (rectA[0] > rectB[0]) {
+        x1C = rectA[0];
+    } else {
+        x1C = rectB[0];
+    }
+
+    // Cálculo de y1C (menor valor de y de las esquinas superiores izquierdas)
+    if (rectA[1] > rectB[1]) {
+        y1C = rectA[1];
+    } else {
+        y1C = rectB[1];
+    }
+
+    // Cálculo de x2C (menor valor de x de las esquinas inferiores derechas)
+    if (x2A < x2B){
+        x2C = x2A;
+    }
+    else{
+        x2C = x2B;
+    }
+
+    // Cálculo de y2C (mayor valor de y de las esquinas inferiores derechas)
+    if (y2A < y2B){
+        y2C = y2A;
+    }
+    else{
+        y2C = y2B;
+    }
+
+    // Verificar si hay intersección
+    if (x1C < x2C && y1C < y2C){
+        // Cálculo del rectángulo de intersección
+        rectC[0] = x1C;           // Coordenada x de la esquina superior izquierda
+        rectC[1] = y1C;           // Coordenada y de la esquina superior izquierda
+        rectC[2] = x2C - x1C;     // Ancho
+        rectC[3] = y2C - y1C;     // Alto
+
+        // Imprimir el rectángulo de intersección
+        cout << "Rectangulo de interseccion C: {";
+        for (int i = 0; i < 4; i++) {
+            cout << rectC[i];
+            if (i < 3) cout << ", ";
+        }
+        cout << "}" << endl;
+    }
+    else {
+        // Si no hay intersección
+        cout << "No hay intersección entre los rectángulos." << endl;
+    }
+    cout << "Rectangulo de interseccion C: (" << rectC[0] << ", " << rectC[1] << ") - Ancho: " << rectC[2] << ", Alto: " << rectC[3] << endl;
+    return 0;
 }
 
 int problema_16(){
@@ -543,6 +1003,68 @@ int problema_16(){
 
 int problema_17(){
     cout << "*** PROBLEMA 17 ***" << endl << endl;
+
+    int limite;
+
+    // Solicitar el número límite al usuario
+    cout << "*** PROBLEMA 17 ***" << endl << endl;
+    cout << "Ingrese un numero: ";
+    cin >> limite;
+
+    int sumaAmigables = 0;
+
+    // Función interna para calcular la suma de los divisores propios y devolver la lista de divisores
+    auto divisores = [](int n){
+        vector<int> divisoresList;
+        for (int i = 1; i <= n / 2; i++) { // Divisores propios de n son menores o iguales a n/2
+            if (n % i == 0){
+                divisoresList.push_back(i);
+            }
+        }
+        return divisoresList;
+    };
+
+    // Función interna para calcular la suma de los divisores
+    auto sumaDivisores = [&](int n){
+        vector<int> divs = divisores(n);
+        int suma = 0;
+        for (int d : divs){
+            suma += d;
+        }
+        return suma;
+    };
+
+    // Buscar números amigables menores al límite ingresado
+    for (int a = 1; a < limite; a++){
+        int b = sumaDivisores(a);  // Suma de los divisores propios de 'a'
+        if (b != a && b < limite && sumaDivisores(b) == a && a < b) {  // Comprobar si son amigables y evitar duplicados
+            sumaAmigables += a + b;   // Sumar 'a' y 'b' (amigables)
+
+            // Imprimir los valores de a y b con sus divisores
+            vector<int> divA = divisores(a);
+            vector<int> divB = divisores(b);
+
+            // Imprimir divisores de 'a'
+            cout << endl << "Divisores de " << a << ": ";
+            for (int d : divA) {
+                cout << d << " ";
+            }
+            cout << "(Suma: " << sumaDivisores(a) << ")\n";
+
+            // Imprimir divisores de 'b'
+            cout << "Divisores de " << b << ": ";
+            for (int d : divB) {
+                cout << d << " ";
+            }
+            cout << "(Suma: " << sumaDivisores(b) << ")" << endl << endl;
+            cout << "----------------------------------" << endl;
+        }
+    }
+
+    // Imprimir el resultado final
+    cout << endl << "El resultado de la suma es: " << sumaAmigables << endl;
+
+    return 0;
 }
 
 int problema_18(){
