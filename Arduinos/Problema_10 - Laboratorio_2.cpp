@@ -17,9 +17,12 @@ int ValorRomano(char c) {
 }
 
 void loop() {
-  Serial.println("Ingrese una cadena: ");
+  Serial.println("Ingrese un numero romano: ");
   while (Serial.available() == 0) {} // Espera hasta que se ingrese algo por el monitor Serial
   String NumRomano = Serial.readString();
+  for (size_t i = 0; i < NumRomano.length(); i++){ //si se ingresa el numero en minuscula
+            NumRomano[i] = toupper(NumRomano[i]); // convierte a mayuscula
+        }
   int total = 0;
   int preValor = 0;
   bool esValido = true; 
